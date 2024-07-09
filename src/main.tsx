@@ -5,6 +5,7 @@ import Login from './pages/Login.tsx';
 import Dashboard from './pages/Dashboard.tsx';
 import Signup from './pages/Signup.tsx';
 import AddEntry from './pages/AddEntry.tsx';
+import EditJournalPage from './pages/EditJournalPage.tsx';
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: "/add-entry",
     element: <AddEntry />
+  },
+  {
+    path: '/edit-entry/:id',
+    element: <EditJournalPage />
   }
 ])
 
