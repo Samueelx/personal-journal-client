@@ -4,6 +4,7 @@ import App from './App.tsx';
 import Login from './pages/Login.tsx';
 import Dashboard from './pages/Dashboard.tsx';
 import Signup from './pages/Signup.tsx';
+import AddEntry from './pages/AddEntry.tsx';
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: "/signup",
     element: <Signup />
+  },
+  {
+    path: "/add-entry",
+    element: <AddEntry />
   }
 ])
 

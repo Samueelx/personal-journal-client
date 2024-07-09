@@ -13,7 +13,7 @@ const Dashboard: React.FC = () => {
     const fetchEntries = async () => {
       try {
         const response = await axiosInstance.get('/journals');
-        console.log("Response", response);
+        console.log("Response", response.data);
         setEntries(response.data);
         setLoading(false);
       } catch (error) {
