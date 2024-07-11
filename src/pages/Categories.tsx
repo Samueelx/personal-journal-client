@@ -8,7 +8,6 @@ const Categories: React.FC = () => {
     const categories = ['Life', 'School', 'Programming', 'Family', 'Hobbies', 'Work'];
     const {setCategoryId} = useContext(CategoryContext);
     const [selectedCategory, setSelectedCategories] = useState<string | null>(null);
-    // const [categoryId, setCategoryId] = useState<string | null>(null)
     const navigate = useNavigate();
     const handleCategoryClick = (category: string) => {
         setSelectedCategories(category);
