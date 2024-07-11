@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/axios';
 import { JournalEntry } from '../types/JournalEntry';
+import { fetchCategories } from '../api/categories';
+import {format} from 'date-fns';
 
 const EditJournalPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -9,8 +11,9 @@ const EditJournalPage: React.FC = () => {
   const [entry, setEntry] = useState<JournalEntry | null>(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [category, setCategory] = useState('');
+  const [categoryId, setCategoryId] = useState('');
   const [date, setDate] = useState('');
+  const [categories, setCategories] = useState<{id: string; name:string}[]>([]);
 
   useEffect(() => {
     // Fetch the journal entry data
@@ -20,16 +23,21 @@ const EditJournalPage: React.FC = () => {
         setEntry(entry);
         setTitle(entry.title);
         setContent(entry.content);
-        setCategory(entry.category);
+        setCategoryId(entry.categoryId);
         setDate(entry.date);
       })
       .catch(error => {
         console.error("There was an error fetching the journal entry!", error);
       });
+
+      fetchCategories().then(categories => {
+        setCategories(categories);
+      });
   }, [id]);
 
   const handleUpdate = () => {
-    axiosInstance.put(`/api/journal/${id}`, { title, content, category, date })
+    const formattedDate = format(new Date(date), 'MM/dd/yyyy');
+    axiosInstance.put(`/journals/${id}`, { title, content, categoryId, date: formattedDate })
       .then(response => {
         console.log(response);
         navigate('/dashboard');
@@ -63,12 +71,16 @@ const EditJournalPage: React.FC = () => {
       </div>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">Category</label>
-        <input
-          type="text"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
+        <select
+          value={categoryId}
+          onChange={(e) => setCategoryId(e.target.value)}
           className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-base focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-        />
+        >
+          <option value="">Select a category</option>
+          {categories.map(category => (
+            <option key={category.id} value={category.id}>{category.name}</option>
+          ))}
+        </select>
       </div>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">Date</label>
