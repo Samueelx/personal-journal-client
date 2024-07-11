@@ -1,34 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useContext } from "react";
 // import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../api/axios";
 import { ErrorResponse } from "../types/ErrorResponse";
 import { AxiosError } from "axios";
 import { format } from 'date-fns';
-import { fetchCategories } from "../api/categories";
+import CategoryContext from "../context/CategoryContext";
 
 const AddEntry: React.FC = () => {
+    const {categoryId } = useContext(CategoryContext);
     const [title, setTitle] = useState<string>('');
     const [content, setContent] = useState<string>('');
-    const [category, setCategory] = useState<string>('');
+    // const [category, setCategory] = useState<string>('');
     const [date, setDate] = useState<string>('');
     const [error, setError] = useState<string>('');
-    const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const getCategories = async () => {
-            try {
-                const data = await fetchCategories();
-                console.log("Categories: ",data)
-                setCategories(data);
-            } catch (error) {
-                console.log('Error fetching categories: ', error);
-            }
-        };
-
-        getCategories();
-    }, []);
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -37,9 +24,9 @@ const AddEntry: React.FC = () => {
         try {
             // const token = localStorage.getItem('token');
             const formattedDate = format(new Date(date), 'MM/dd/yyyy');
-            console.log({ title, content, category, date: formattedDate });
+            console.log({ title, content, categoryId, date: formattedDate });
             const response = await axiosInstance.post('/journals', {
-                title, content, category, date: formattedDate
+                title, content, categoryId, date: formattedDate
             });
             if (response.status === 201) {
                 navigate('/dashboard');
@@ -72,7 +59,7 @@ const AddEntry: React.FC = () => {
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="title" className="block text-gray-700">Title</label>
+                        <label htmlFor="title" className="block text-gray-700">Content</label>
                         <textarea
                             className="mt-1 block w-full px-4 py-2 border rounded-lg focus:ring focus:ring-opacity-50"
                             value={content}
@@ -80,7 +67,7 @@ const AddEntry: React.FC = () => {
                             required
                         />
                     </div>
-                    <div className="mb-4">
+                    {/* <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700">Category</label>
                         <select
                             value={category}
@@ -92,7 +79,7 @@ const AddEntry: React.FC = () => {
                                 <option key={cat.id} value={cat.name}>{cat.name}</option>
                             ))}
                         </select>
-                    </div>
+                    </div> */}
                     <div className="mb-4">
                         <label className="block text-gray-700">Date</label>
                         <input

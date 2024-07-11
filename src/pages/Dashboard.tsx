@@ -26,7 +26,7 @@ const Dashboard: React.FC = () => {
   }, []);
 
   const handleAddEntry = () => {
-    navigate('/add-entry');
+    navigate('/categories');
   };
 
   const handleEditEntry = (id: number) => {
