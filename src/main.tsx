@@ -8,6 +8,7 @@ import AddEntry from './pages/AddEntry.tsx';
 import EditJournalPage from './pages/EditJournalPage.tsx';
 import Categories from './pages/Categories.tsx';
 import { CategoryProvider } from './context/CategoryContext.tsx';
+import UpdateUser from './pages/UpdateUser.tsx';
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
   {
     path: '/categories',
     element: <Categories />
+  },
+  {
+    path: '/profile',
+    element: <UpdateUser />
   }
 ])
 

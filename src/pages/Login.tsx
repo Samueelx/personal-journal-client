@@ -19,8 +19,9 @@ const Login: React.FC = () => {
         password,
       });
       /**store token in localstorage */
-      localStorage.setItem("token", response.data.token);
-      console.log("Token stored: ", response.data.token);
+      const {user, token} = response.data
+      localStorage.setItem("token", token);
+      localStorage.setItem('user', JSON.stringify(user));
       navigate("/dashboard");
     } catch (error) {
         const axiosError = error as AxiosError<ErrorResponse>;

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axiosInstance from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { JournalEntry } from '../types/ErrorResponse';
+import Avatar from '../components/Avatar';
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -45,6 +46,7 @@ const Dashboard: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-4xl p-8 bg-white shadow-md rounded-md">
+        <div className='flex justify-end'><Avatar /></div>
         <h2 className="text-2xl font-bold mb-4">Dashboard</h2>
         {loading && <p>Loading...</p>}
         {error && <p className="mb-4 text-red-500">{error}</p>}
