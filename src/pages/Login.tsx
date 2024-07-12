@@ -9,9 +9,11 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    setLoading(true);
 
     try {
       const response = await axiosInstance.post("/users/login", {
@@ -19,20 +21,22 @@ const Login: React.FC = () => {
         password,
       });
       /**store token in localstorage */
-      const {user, token} = response.data
+      const { user, token } = response.data;
       localStorage.setItem("token", token);
-      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem("user", JSON.stringify(user));
+      setLoading(false);
       navigate("/dashboard");
     } catch (error) {
-        const axiosError = error as AxiosError<ErrorResponse>;
-        if(axiosError.response && axiosError.response.data){
-            setError(
-                axiosError.response?.data?.message || "An error occured. Please try again"
-              );
-        } else {
-            setError('An error occured. Please try again');
-        }
-      
+      setLoading(false);
+      const axiosError = error as AxiosError<ErrorResponse>;
+      if (axiosError.response && axiosError.response.data) {
+        setError(
+          axiosError.response?.data?.message ||
+            "An error occured. Please try again"
+        );
+      } else {
+        setError("An error occured. Please try again");
+      }
     }
   };
 
@@ -56,20 +60,31 @@ const Login: React.FC = () => {
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-gray-700">Password</label>
-            <input 
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            <label htmlFor="password" className="block text-gray-700">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
           </div>
-          <button type="submit"
-          className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:outline-none">
+          <button
+            type="submit"
+            className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:outline-none"
+          >
             Login
           </button>
+          <div className="flex justify-center">
+            {loading ? (
+              <span className="loading loading-ring loading-lg"></span>
+            ) : (
+              <></>
+            )}
+          </div>
         </form>
       </div>
     </div>
